@@ -1,5 +1,5 @@
 import pygame
-from piece import Piece
+from pieces.piece import Piece
 
 # Clase derivada para un cruce
 class CrossPiece(Piece):

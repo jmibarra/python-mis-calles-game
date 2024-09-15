@@ -1,5 +1,5 @@
 import pygame
-from piece import Piece
+from pieces.piece import Piece
 
 class StraightPiece(Piece):
     def __init__(self, x, y, width, height):
