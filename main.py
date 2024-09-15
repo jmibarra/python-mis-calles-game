@@ -1,6 +1,8 @@
 import pygame
 import sys
-from piece import Piece
+from pieces.cross import CrossPiece
+from pieces.straight_road import StraightPiece
+from pieces.curve import CurvePiece
 from utils import snap_to_closest
 from catalog import create_catalog
 import os
@@ -25,7 +27,7 @@ BLACK = (0, 0, 0)
 CATALOG_WIDTH = 200
 CATALOG_HEIGHT = HEIGHT
 
-# Crear el catálogo de piezas
+# Crear el catálogo de piezas (ajustado a las clases hijas)
 catalog = create_catalog()
 
 # Lista de piezas que se han colocado en el tablero
@@ -73,7 +75,14 @@ while running:
                 if not clicked_on_piece:
                     for piece in catalog:
                         if piece.rect.collidepoint(event.pos):
-                            selected_piece = Piece(piece.rect.x, piece.rect.y, piece.rect.width, piece.rect.height, piece.shape)
+                            # Crear una nueva instancia de la pieza seleccionada según su tipo
+                            if isinstance(piece, StraightPiece):
+                                selected_piece = StraightPiece(piece.rect.x, piece.rect.y, piece.rect.width, piece.rect.height)
+                            elif isinstance(piece, CurvePiece):
+                                selected_piece = CurvePiece(piece.rect.x, piece.rect.y, piece.rect.width, piece.rect.height)
+                            elif isinstance(piece, CrossPiece):
+                                selected_piece = CrossPiece(piece.rect.x, piece.rect.y, piece.rect.width, piece.rect.height)
+
                             selected_piece.dragging = True
                             offset_x = selected_piece.rect.x - mouse_x
                             offset_y = selected_piece.rect.y - mouse_y
@@ -136,4 +145,3 @@ while running:
 pygame.quit()
 
 sys.exit()
-

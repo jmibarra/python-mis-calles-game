@@ -1,9 +1,11 @@
-from piece import Piece
+from pieces.cross import CrossPiece
+from pieces.straight_road import StraightPiece
+from pieces.curve import CurvePiece
 
 def create_catalog():
     """Función que devuelve el catálogo de piezas."""
     return [
-        Piece(850, 50, 100, 50, "rect"),    # Calle recta corta
-        Piece(850, 120, 100, 100, "cross"), # Cruce
-        Piece(850, 250, 100, 100, "curve")  # Curva
+        StraightPiece(850, 20, 100, 100), # Calle recta corta
+        CrossPiece(850, 120, 100, 100), # Cruce
+        CurvePiece(850, 250, 100, 100)  # Curva
     ]
