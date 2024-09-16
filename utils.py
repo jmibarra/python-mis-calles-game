@@ -32,8 +32,10 @@ def snap_to_closest(piece, placed_pieces):
     # Si se encuentra el mejor punto de encastre y está dentro del rango
     if best_snap and min_distance < SNAP_DISTANCE:
         other_piece, other_point, point = best_snap
-        new_x = other_piece.rect.x + other_point[0] - point[0]
-        new_y = other_piece.rect.y + other_point[1] - point[1]
+        print(f"Punto de encastre cercano encontrado: {other_piece.rect.x}")
+        print 
+        new_x = other_piece.rect.x + other_point[1] *2
+        new_y = other_piece.rect.y
 
         # Actualizar la posición de la pieza para que se toque correctamente
         piece.rect.x = new_x
