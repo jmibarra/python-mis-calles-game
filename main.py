@@ -52,7 +52,7 @@ while running:
     clock.tick(30)
 
     # Monitorear el uso de memoria
-    print(f"Uso de memoria: {process.memory_info().rss / 1024 ** 2:.2f} MB")
+    #print(f"Uso de memoria: {process.memory_info().rss / 1024 ** 2:.2f} MB")
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -77,11 +77,11 @@ while running:
                         if piece.rect.collidepoint(event.pos):
                             # Crear una nueva instancia de la pieza seleccionada según su tipo
                             if isinstance(piece, StraightPiece):
-                                selected_piece = StraightPiece(piece.rect.x, piece.rect.y, piece.rect.width, piece.rect.height)
+                                selected_piece = StraightPiece(mouse_x, mouse_y, piece.rect.width, piece.rect.height)
                             elif isinstance(piece, CurvePiece):
-                                selected_piece = CurvePiece(piece.rect.x, piece.rect.y, piece.rect.width, piece.rect.height)
+                                selected_piece = CurvePiece(mouse_x, mouse_y, piece.rect.width, piece.rect.height)
                             elif isinstance(piece, CrossPiece):
-                                selected_piece = CrossPiece(piece.rect.x, piece.rect.y, piece.rect.width, piece.rect.height)
+                                selected_piece = CrossPiece(mouse_x, mouse_y, piece.rect.width, piece.rect.height)
 
                             selected_piece.dragging = True
                             offset_x = selected_piece.rect.x - mouse_x
