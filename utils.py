@@ -31,9 +31,9 @@ def snap_to_closest(piece, placed_pieces):
 
     # Si se encuentra el mejor punto de encastre y está dentro del rango
     if best_snap and min_distance < SNAP_DISTANCE:
+        print(f"Se encontró punto de encastre cercano. Distancia mínima: {min_distance}")
+        print("Punto de encastre:", best_snap)
         other_piece, other_point, point = best_snap
-        print(f"Punto de encastre cercano encontrado: {other_piece.rect.x}")
-        print 
         new_x = other_piece.rect.x + other_point[1] *2
         new_y = other_piece.rect.y
 
@@ -44,7 +44,7 @@ def snap_to_closest(piece, placed_pieces):
         print(f"No se encontró punto de encastre cercano. Distancia mínima encontrada: {min_distance}")
 
 
-def are_points_close(point1, point2, threshold=10):
+def are_points_close(point1, point2, threshold=50):
     """Verifica si dos puntos están cerca uno del otro."""
     return math.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2) < threshold
 
