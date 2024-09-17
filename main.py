@@ -59,6 +59,7 @@ while running:
             running = False
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
+            print("Mouse button down")
             mouse_x, mouse_y = event.pos
             if event.button == 1:  # Botón izquierdo
                 clicked_on_piece = False
@@ -97,10 +98,11 @@ while running:
 
         elif event.type == pygame.MOUSEBUTTONUP:
             if selected_piece:
+                print("Pieza ya seleccionada")
                 selected_piece.dragging = False
+                snap_to_closest(selected_piece, placed_pieces) # Encaja la pieza
                 if selected_piece not in placed_pieces:
                     # Intentar encajar la pieza en el tablero
-                    snap_to_closest(selected_piece, placed_pieces)  # Encaja la pieza
                     if selected_piece.rect.colliderect(pygame.Rect(0, 0, WIDTH - CATALOG_WIDTH, HEIGHT)):
                         placed_pieces.append(selected_piece)
                 selected_piece = None

@@ -2,7 +2,7 @@ import math
 import pygame
 
 # Distancia mínima para que una pieza se considere "cerca" de otra
-SNAP_DISTANCE = 300
+SNAP_DISTANCE = 50
 
 def snap_to_closest(piece, placed_pieces):
     """Encaja la pieza en el punto más cercano de otras piezas si es posible."""
