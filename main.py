@@ -58,6 +58,10 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_r and selected_piece:
+                selected_piece.rotate()
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             print("Mouse button down")
             mouse_x, mouse_y = event.pos

@@ -27,12 +27,12 @@ class CrossPiece(Piece):
     
                 # Dibuja las líneas amarillas (banquinas)
         line_thickness = 10
-        pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.rect.left, self.rect.top, self.rect.width // 4, line_thickness))  # Línea superior
-        pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.rect.left, self.rect.bottom - line_thickness, self.rect.width // 4, line_thickness))  # Línea inferior
-        pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.rect.left + (self.rect.width // 4 * 3), self.rect.top, self.rect.width // 4, line_thickness))  # Línea superior
-        pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.rect.left + (self.rect.width // 4 * 3), self.rect.bottom - line_thickness, self.rect.width // 4, line_thickness)) 
+        pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.rect.left, self.rect.top, self.rect.width // 16, line_thickness))  # Línea superior
+        pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.rect.left, self.rect.bottom - line_thickness, self.rect.width // 16, line_thickness))  # Línea inferior
+        pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.rect.left + (self.rect.width // 8 * 7.90 ), self.rect.top, self.rect.width // 16, line_thickness))  # Línea superior
+        pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.rect.left + (self.rect.width // 8 * 7.90 ), self.rect.bottom - line_thickness, self.rect.width // 16, line_thickness)) 
 
-                # Dibuja la línea blanca punteada en el centro
+        # Dibuja la línea blanca punteada en el centro
         num_dashes = 10
         dash_length = self.rect.width / (num_dashes * 2)
         for i in range(num_dashes):
