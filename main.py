@@ -14,7 +14,7 @@ from catalog import create_catalog
 pygame.init()
 
 # Definir tamaño de la ventana
-WIDTH, HEIGHT = 1000, 600
+WIDTH, HEIGHT = 1800, 1000
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Juego de Pistas de Autos")
 
