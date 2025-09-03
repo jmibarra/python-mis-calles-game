@@ -6,9 +6,12 @@ import math
 class StraightPiece(Piece):
     # Definimos la ruta de la imagen como una variable de la clase
     IMAGE_PATH = "assets/straight_road.png"
+    PIECE_TYPE = "Straight"
 
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, angle=0):
         super().__init__(x, y, width, height)
+
+        self.angle = angle
         
         # Cargamos la imagen usando la ruta definida en la clase
         try:

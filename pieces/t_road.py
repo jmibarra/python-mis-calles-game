@@ -5,8 +5,9 @@ from pieces.piece import Piece
 class TRoadPiece(Piece):
     # Definimos la ruta de la imagen como una variable de la clase
     IMAGE_PATH = "assets/t_road.png"
+    PIECE_TYPE = "TRoad"
 
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, angle=0):
         super().__init__(x, y, width, height)
         
         # Cargamos la imagen usando la ruta definida en la clase

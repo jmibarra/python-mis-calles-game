@@ -32,3 +32,12 @@ class Piece:
             global_x = self.rect.x + point[0]
             global_y = self.rect.y + point[1]
             pygame.draw.circle(surface, (255, 0, 0), (global_x, global_y), 5)
+
+    def to_dict(self):
+        """Serializa el estado de la pieza a un diccionario."""
+        return {
+            "type": self.PIECE_TYPE,
+            "x": self.rect.x,
+            "y": self.rect.y,
+            "angle": self.angle
+        }

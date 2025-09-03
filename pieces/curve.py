@@ -6,9 +6,11 @@ from pieces.piece import Piece
 class CurvePiece(Piece):
     # Definimos la ruta de la imagen
     IMAGE_PATH = "assets/curve.png"
+    PIECE_TYPE = "Curve"
 
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, angle=0):
         super().__init__(x, y, width, height)
+        self.angle = angle
         
         # Cargamos la imagen desde la ruta de la clase
         try:
@@ -18,7 +20,7 @@ class CurvePiece(Piece):
             print(f"Error: No se pudo cargar la imagen en {CurvePiece.IMAGE_PATH}")
             self.image = pygame.Surface((self.rect.width, self.rect.height))
             self.image.fill((0, 0, 0))
-
+    
     def update_snap_points(self):
         """Actualiza los puntos de encastre basados en la posición y rotación actual de la pieza."""
         center_x, center_y = self.rect.width // 2, self.rect.height // 2

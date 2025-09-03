@@ -5,9 +5,11 @@ from pieces.piece import Piece
 class CrossPiece(Piece):
     # Definimos la ruta de la imagen como una variable de la clase
     IMAGE_PATH = "assets/cross.png"
+    PIECE_TYPE = "Cross"
 
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, angle=0):
         super().__init__(x, y, width, height)
+        self.angle = angle
         
         # Cargamos la imagen usando la ruta definida en la clase
         try:
@@ -18,6 +20,8 @@ class CrossPiece(Piece):
             print(f"Error: No se pudo cargar la imagen en {CrossPiece.IMAGE_PATH}")
             self.image = pygame.Surface((self.rect.width, self.rect.height))
             self.image.fill((0, 0, 0))
+        
+        self.update_snap_points()
 
     def update_snap_points(self):
         """Actualiza los puntos de encastre basados en la posición actual de la pieza."""
@@ -31,7 +35,6 @@ class CrossPiece(Piece):
 
     def draw(self, surface):
         # La pieza de cruce no necesita rotar visualmente si la imagen es simétrica,
-        # pero mantenemos la lógica por si en el futuro usas una imagen no simétrica.
         rotated_surface = pygame.transform.rotate(self.image, self.angle)
         new_rect = rotated_surface.get_rect(center=self.rect.center)
         surface.blit(rotated_surface, new_rect.topleft)

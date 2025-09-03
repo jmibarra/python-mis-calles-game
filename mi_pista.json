@@ -1,0 +1,92 @@
+[
+    {
+        "type": "Straight",
+        "x": 827,
+        "y": 159,
+        "angle": 0
+    },
+    {
+        "type": "Curve",
+        "x": 927,
+        "y": 159,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 927,
+        "y": 259,
+        "angle": 90
+    },
+    {
+        "type": "TRoad",
+        "x": 927,
+        "y": 359,
+        "angle": 0
+    },
+    {
+        "type": "Curve",
+        "x": 927,
+        "y": 459,
+        "angle": 270
+    },
+    {
+        "type": "Straight",
+        "x": 827,
+        "y": 459,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 827,
+        "y": 359,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 727,
+        "y": 359,
+        "angle": 0
+    },
+    {
+        "type": "Curve",
+        "x": 727,
+        "y": 459,
+        "angle": 180
+    },
+    {
+        "type": "Straight",
+        "x": 627,
+        "y": 359,
+        "angle": 0
+    },
+    {
+        "type": "Curve",
+        "x": 527,
+        "y": 359,
+        "angle": 180
+    },
+    {
+        "type": "Curve",
+        "x": 527,
+        "y": 259,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 627,
+        "y": 259,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 727,
+        "y": 259,
+        "angle": 0
+    },
+    {
+        "type": "Curve",
+        "x": 727,
+        "y": 159,
+        "angle": 90
+    }
+]
