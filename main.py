@@ -1,12 +1,14 @@
 import pygame
 import sys
+import os
+import psutil
+
 from pieces.cross import CrossPiece
 from pieces.straight_road import StraightPiece
 from pieces.curve import CurvePiece
+from pieces.t_road import TRoadPiece
 from utils import snap_to_closest
 from catalog import create_catalog
-import os
-import psutil
 
 # Inicializar Pygame
 pygame.init()
@@ -87,6 +89,8 @@ while running:
                                 selected_piece = CurvePiece(mouse_x, mouse_y, piece.rect.width, piece.rect.height)
                             elif isinstance(piece, CrossPiece):
                                 selected_piece = CrossPiece(mouse_x, mouse_y, piece.rect.width, piece.rect.height)
+                            elif isinstance(piece, TRoadPiece):
+                                selected_piece = TRoadPiece(mouse_x, mouse_y, piece.rect.width, piece.rect.height)
 
                             selected_piece.dragging = True
                             offset_x = selected_piece.rect.x - mouse_x
