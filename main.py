@@ -17,7 +17,8 @@ pygame.init()
 
 # Definir tamaño de la ventana
 WIDTH, HEIGHT = 1800, 1000
-window = pygame.display.set_mode((WIDTH, HEIGHT))
+# Modificación: Añadir pygame.RESIZABLE para que la ventana se pueda ajustar
+window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
 pygame.display.set_caption("Juego de Pistas de Autos")
 
 # Definir colores
@@ -31,8 +32,8 @@ BLACK = (0, 0, 0)
 CATALOG_WIDTH = 200
 CATALOG_HEIGHT = HEIGHT
 
-# Crear el catálogo de piezas
-catalog = create_catalog()
+# Crear el catálogo de piezas, pasando el ancho de la ventana
+catalog = create_catalog(WIDTH)
 
 # Lista de piezas que se han colocado en el tablero
 placed_pieces = []
@@ -58,11 +59,21 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        # --- LÓGICA PARA AJUSTAR LA VENTANA ---
+        elif event.type == pygame.VIDEORESIZE:
+            WIDTH, HEIGHT = event.w, event.h
+            window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
+            # Actualizamos la altura del catálogo
+            CATALOG_HEIGHT = HEIGHT
+            # ¡Volvemos a crear el catálogo con el nuevo ancho!
+            catalog = create_catalog(WIDTH)
+
+
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_r and selected_piece:
                 selected_piece.rotate()
             
-            # --- NUEVA LÓGICA DE GUARDADO Y CARGADO ---
+            # --- LÓGICA DE GUARDADO Y CARGADO ---
             elif event.key == pygame.K_g: # Tecla G para Guardar
                 print("Intentando guardar la pista...")
                 save_track(placed_pieces)
@@ -115,6 +126,7 @@ while running:
                 selected_piece.dragging = False
                 snap_to_closest(selected_piece, placed_pieces)
                 if selected_piece not in placed_pieces:
+                    # Ajustamos el área de colisión al nuevo tamaño de la ventana
                     if selected_piece.rect.colliderect(pygame.Rect(0, 0, WIDTH - CATALOG_WIDTH, HEIGHT)):
                         placed_pieces.append(selected_piece)
                 selected_piece = None
@@ -127,16 +139,17 @@ while running:
 
     # --- Sección de Dibujo ---
     window.fill(WHITE)
+    # Ajustamos el dibujo del catálogo al nuevo tamaño de la ventana
     pygame.draw.rect(window, BLUE, (WIDTH - CATALOG_WIDTH, 0, CATALOG_WIDTH, CATALOG_HEIGHT))
     pygame.draw.line(window, DARK_GRAY, (WIDTH - CATALOG_WIDTH, 0), (WIDTH - CATALOG_WIDTH, HEIGHT), 5)
 
-    # Títulos y texto de ayuda
+    # Títulos y texto de ayuda (reposicionados dinámicamente)
     catalog_text = font.render("Catálogo", True, BLACK)
     window.blit(catalog_text, (WIDTH - CATALOG_WIDTH + 65, 10))
     board_text = font.render("Tablero", True, BLACK)
     window.blit(board_text, (20, 10))
     
-    # Nuevo texto de ayuda para guardar/cargar
+    # Nuevo texto de ayuda para guardar/cargar (reposicionado dinámicamente)
     save_text = font.render("G = Guardar", True, BLACK)
     window.blit(save_text, (WIDTH - CATALOG_WIDTH + 50, HEIGHT - 60))
     load_text = font.render("C = Cargar", True, BLACK)
