@@ -15,14 +15,16 @@ PIECE_SIZE = 100  # Asumimos un tamaño constante para las piezas
 DEFAULT_FILENAME = "mi_pista.json" # Nombre de archivo por defecto
 
 def save_track(placed_pieces):
-    """Guarda la pista actual en el archivo por defecto."""
+    """Guarda la pista actual y devuelve un mensaje de estado."""
     track_data = [piece.to_dict() for piece in placed_pieces]
     try:
         with open(DEFAULT_FILENAME, 'w') as f:
             json.dump(track_data, f, indent=4)
         print(f"Pista guardada exitosamente en {DEFAULT_FILENAME}")
+        return f"Pista guardada en {DEFAULT_FILENAME}"
     except IOError as e:
         print(f"Error al guardar la pista: {e}")
+        return f"Error al guardar la pista: {e}"
 
 def load_track():
     """Carga una pista desde el archivo por defecto y devuelve una lista de piezas."""
