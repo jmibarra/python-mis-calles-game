@@ -2,11 +2,11 @@ import sys
 import os
 import pygame
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                             QHBoxLayout, QPushButton, QLabel, QFrame)
+                             QHBoxLayout, QPushButton, QLabel, QFrame, QFileDialog)
 from PyQt6.QtGui import QAction, QIcon, QPixmap
-from PyQt6.QtCore import QTimer, QSize, Qt # Importamos Qt para las teclas
+from PyQt6.QtCore import QTimer, QSize, Qt
 
-# Importamos toda la lógica de nuestro juego
+# Importamos toda la lógica del juego
 from pieces.cross import CrossPiece
 from pieces.straight_road import StraightPiece
 from pieces.curve import CurvePiece
@@ -18,7 +18,7 @@ from file_manager import save_track, load_track
 GAME_WIDTH, GAME_HEIGHT = 1600, 1000
 CATALOG_WIDTH = 200
 WHITE = (255, 255, 255)
-PIECE_SIZE = 100 # Tamaño estándar de las piezas
+PIECE_SIZE = 100
 
 class GameWidget(QWidget):
     """El widget que contiene nuestro lienzo de Pygame y su lógica."""
@@ -51,7 +51,6 @@ class GameWidget(QWidget):
 
         pygame.display.update()
 
-    # --- NUEVO: Método para manejar los eventos del teclado ---
     def keyPressEvent(self, event):
         """Captura las pulsaciones de teclas cuando este widget tiene el foco."""
         # Comprobamos si la tecla presionada es la 'R'
@@ -104,20 +103,22 @@ class GameWidget(QWidget):
             
     def create_piece_from_catalog(self, piece_class):
         """Crea una nueva pieza para que siga al cursor."""
-        # Ponemos el foco en el widget del juego para que acepte la rotación
         self.setFocus() 
         mouse_pos = pygame.mouse.get_pos()
         self.selected_piece = piece_class(mouse_pos[0], mouse_pos[1], PIECE_SIZE, PIECE_SIZE)
+
 
 class MainWindow(QMainWindow):
     """La ventana principal de nuestra aplicación híbrida."""
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Mi Juego de Calles (PyQt + Pygame)")
+        # --- NUEVO: Variable para guardar la ruta del archivo actual ---
+        self.current_track_path = None
         
         self.setup_menu()
-
-        # --- Layout Principal ---
+        
+        # --- El resto del __init__ no cambia ---
         main_layout = QHBoxLayout()
         self.game_widget = GameWidget()
         main_layout.addWidget(self.game_widget)
@@ -127,7 +128,6 @@ class MainWindow(QMainWindow):
         line.setFrameShadow(QFrame.Shadow.Sunken)
         main_layout.addWidget(line)
 
-        # --- Creación del Catálogo con Widgets de PyQt ---
         catalog_layout = QVBoxLayout()
         catalog_label = QLabel("Catálogo")
         catalog_layout.addWidget(catalog_label)
@@ -159,11 +159,11 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(main_layout)
         self.setCentralWidget(central_widget)
 
-        # --- Bucle del Juego con QTimer ---
         self.timer = QTimer(self)
         self.timer.setInterval(33)
         self.timer.timeout.connect(self.game_widget.run_game_frame)
         self.timer.start()
+
 
     def setup_menu(self):
         menubar = self.menuBar()
@@ -177,6 +177,9 @@ class MainWindow(QMainWindow):
 
         save_action = QAction("Guardar", self)
         save_action.triggered.connect(self.guardar_juego)
+        
+        save_as_action = QAction("Guardar Como...", self)
+        save_as_action.triggered.connect(self.guardar_juego_como)
 
         quit_action = QAction("Cerrar", self)
         quit_action.triggered.connect(QApplication.instance().quit)
@@ -184,22 +187,47 @@ class MainWindow(QMainWindow):
         file_menu.addAction(new_action)
         file_menu.addAction(open_action)
         file_menu.addAction(save_action)
+        file_menu.addAction(save_as_action) # Añadimos la nueva acción al menú
         file_menu.addSeparator()
         file_menu.addAction(quit_action)
 
     def nuevo_juego(self):
         print("Función 'Nuevo' activada.")
         self.game_widget.placed_pieces.clear()
+        self.current_track_path = None # Reseteamos la ruta
 
     def abrir_juego(self):
         print("Función 'Abrir' activada.")
-        loaded_pieces = load_track()
-        if loaded_pieces is not None:
-            self.game_widget.placed_pieces = loaded_pieces
+        # Abre el diálogo nativo para SELECCIONAR un archivo
+        filepath, _ = QFileDialog.getOpenFileName(self, "Abrir Pista", "", "Archivos de Pista (*.json)")
+        
+        if filepath: # Si el usuario seleccionó un archivo (no canceló)
+            loaded_pieces = load_track(filepath)
+            if loaded_pieces is not None:
+                self.game_widget.placed_pieces = loaded_pieces
+                self.current_track_path = filepath # Guardamos la ruta
 
     def guardar_juego(self):
         print("Función 'Guardar' activada.")
-        save_track(self.game_widget.placed_pieces)
+        # Si ya conocemos la ruta, guardamos directamente.
+        if self.current_track_path:
+            save_track(self.game_widget.placed_pieces, self.current_track_path)
+        else:
+            # Si no, llamamos a "Guardar Como..." para que elija una.
+            self.guardar_juego_como()
+
+    def guardar_juego_como(self):
+        print("Función 'Guardar Como...' activada.")
+        # Abre el diálogo nativo para ELEGIR DÓNDE guardar
+        filepath, _ = QFileDialog.getSaveFileName(self, "Guardar Pista", "", "Archivos de Pista (*.json)")
+        
+        if filepath: # Si el usuario eligió una ubicación y nombre
+             # Aseguramos que la extensión sea .json
+            if not filepath.endswith('.json'):
+                filepath += '.json'
+            save_track(self.game_widget.placed_pieces, filepath)
+            self.current_track_path = filepath # Actualizamos la ruta actual
+
 
 # --- Punto de Entrada de la Aplicación ---
 if __name__ == '__main__':

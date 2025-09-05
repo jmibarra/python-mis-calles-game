@@ -4,32 +4,29 @@ from pieces.straight_road import StraightPiece
 from pieces.curve import CurvePiece
 from pieces.t_road import TRoadPiece
 
-# Un diccionario para mapear los nombres de las piezas a sus clases
+# Diccionario para mapear los nombres de las piezas a sus clases
 PIECE_CLASSES = {
     "Cross": CrossPiece,
     "Straight": StraightPiece,
     "Curve": CurvePiece,
     "TRoad": TRoadPiece
 }
-PIECE_SIZE = 100  # Asumimos un tamaño constante para las piezas
-DEFAULT_FILENAME = "mi_pista.json" # Nombre de archivo por defecto
+PIECE_SIZE = 100
 
-def save_track(placed_pieces):
-    """Guarda la pista actual y devuelve un mensaje de estado."""
+def save_track(placed_pieces, filepath):
     track_data = [piece.to_dict() for piece in placed_pieces]
     try:
-        with open(DEFAULT_FILENAME, 'w') as f:
+        with open(filepath, 'w') as f:
             json.dump(track_data, f, indent=4)
-        print(f"Pista guardada exitosamente en {DEFAULT_FILENAME}")
-        return f"Pista guardada en {DEFAULT_FILENAME}"
+        print(f"Pista guardada exitosamente en {filepath}")
+        return f"Pista guardada en {filepath}"
     except IOError as e:
         print(f"Error al guardar la pista: {e}")
         return f"Error al guardar la pista: {e}"
 
-def load_track():
-    """Carga una pista desde el archivo por defecto y devuelve una lista de piezas."""
+def load_track(filepath):
     try:
-        with open(DEFAULT_FILENAME, 'r') as f:
+        with open(filepath, 'r') as f:
             track_data = json.load(f)
 
         loaded_pieces = []
@@ -47,10 +44,10 @@ def load_track():
                 loaded_pieces.append(piece)
             else:
                 print(f"Tipo de pieza desconocido en el archivo: {piece_type}")
-        print(f"Pista cargada exitosamente desde {DEFAULT_FILENAME}")
+        print(f"Pista cargada exitosamente desde {filepath}")
         return loaded_pieces
     except FileNotFoundError:
-        print(f"No se encontró el archivo de guardado '{DEFAULT_FILENAME}'. Coloca algunas piezas y presiona 'G' para crear uno.")
+        print(f"No se encontró el archivo de guardado '{filepath}'.")
         return None
     except (json.JSONDecodeError, IOError) as e:
         print(f"Error al cargar la pista: {e}")
