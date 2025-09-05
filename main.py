@@ -1,184 +1,109 @@
-import pygame
 import sys
 import os
-import psutil
+import pygame
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton
+from PyQt6.QtGui import QAction
+from PyQt6.QtCore import QTimer
 
+# Importamos toda la lógica de nuestro juego
 from pieces.cross import CrossPiece
 from pieces.straight_road import StraightPiece
 from pieces.curve import CurvePiece
 from pieces.t_road import TRoadPiece
 from utils import snap_to_closest
 from catalog import create_catalog
-# ¡Importamos las nuevas funciones sin diálogo!
-from file_manager import save_track, load_track 
+from file_manager import save_track, load_track
 
-# Inicializar Pygame
-pygame.init()
-
-# Definir tamaño de la ventana
-WIDTH, HEIGHT = 1800, 1000
-window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
-pygame.display.set_caption("Juego de Pistas de Autos")
-
-# Definir colores
-WHITE = (255, 255, 255)
-GRAY = (200, 200, 200)
-BLUE = (135, 206, 235)
-DARK_GRAY = (100, 100, 100)
-BLACK = (0, 0, 0)
-
-# Definir la posición y tamaño del catálogo
+# --- Constantes del Juego ---
+GAME_WIDTH, GAME_HEIGHT = 1600, 1000
 CATALOG_WIDTH = 200
-CATALOG_HEIGHT = HEIGHT
+WHITE = (255, 255, 255)
+BLUE = (135, 206, 235)
 
-# Crear el catálogo de piezas, pasando el ancho de la ventana
-catalog = create_catalog(WIDTH)
+class GameWidget(QWidget):
+    """El widget que contendrá nuestro lienzo de Pygame."""
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setFixedSize(GAME_WIDTH, GAME_HEIGHT)
 
-# Lista de piezas que se han colocado en el tablero
-placed_pieces = []
+        # El truco para incrustar Pygame: le decimos que dibuje en este widget.
+        os.environ['SDL_WINDOWID'] = str(int(self.winId()))
+        pygame.init()
+        self.screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
-# Reloj para controlar la tasa de frames por segundo
-clock = pygame.time.Clock()
+        # --- Variables del estado del juego ---
+        self.placed_pieces = []
+        self.selected_piece = None
+        self.offset_x, self.offset_y = 0, 0
 
-# Monitoreo de uso de memoria
-process = psutil.Process(os.getpid())
+    def run_game_logic(self):
+        """Esta función contiene la lógica de dibujo de un fotograma de Pygame."""
+        # Manejo de eventos de Pygame (lo adaptaremos más adelante)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                # En lugar de salir, delegamos el cierre a la app de PyQt
+                QApplication.instance().quit()
+                return
 
-# Fuente para el texto
-font = pygame.font.SysFont(None, 24)
+        self.screen.fill(WHITE)
 
-# --- VARIABLES PARA EL MENSAJE EN PANTALLA ---
-display_message = ""
-message_timer = 0
-MESSAGE_DURATION = 90  # 3 segundos a 30 FPS
+        show_points = self.selected_piece is not None
+        for piece in self.placed_pieces:
+            piece.draw(self.screen, show_snap_points=show_points)
+        
+        if self.selected_piece:
+            self.selected_piece.draw(self.screen, show_snap_points=True)
 
-# Bucle principal del juego
-running = True
-selected_piece = None
-offset_x, offset_y = 0, 0
+        pygame.display.update()
 
-while running:
-    clock.tick(30)
+class MainWindow(QMainWindow):
+    """La ventana principal de nuestra aplicación híbrida."""
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Mi Juego de Calles (PyQt + Pygame)")
+        
+        self.setup_menu()
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+        main_layout = QHBoxLayout()
 
-        elif event.type == pygame.VIDEORESIZE:
-            WIDTH, HEIGHT = event.w, event.h
-            window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
-            CATALOG_HEIGHT = HEIGHT
-            catalog = create_catalog(WIDTH)
+        self.game_widget = GameWidget()
+        main_layout.addWidget(self.game_widget)
 
+        catalog_layout = QVBoxLayout()
+        
+        # Contenedor central y asignación de layouts
+        central_widget = QWidget()
+        central_widget.setLayout(main_layout)
+        self.setCentralWidget(central_widget)
 
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_r and selected_piece:
-                selected_piece.rotate()
-            
-            # --- LÓGICA DE GUARDADO Y CARGADO ---
-            elif event.key == pygame.K_g: # Tecla G para Guardar
-                message = save_track(placed_pieces)
-                display_message = message
-                message_timer = MESSAGE_DURATION
-            
-            elif event.key == pygame.K_c: # Tecla C para Cargar
-                print("Intentando cargar la pista...")
-                loaded = load_track()
-                if loaded is not None:
-                    placed_pieces = loaded
+        # --- El nuevo "Bucle del Juego" ---
+        # Usamos un QTimer que llamará a la lógica de Pygame cada 33 ms (~30 FPS)
+        self.timer = QTimer(self)
+        self.timer.setInterval(33)
+        self.timer.timeout.connect(self.game_widget.run_game_logic)
+        self.timer.start()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:  # Botón izquierdo
-                mouse_x, mouse_y = event.pos
-                clicked_on_piece = False
-                for piece in placed_pieces:
-                    if piece.rect.collidepoint(event.pos):
-                        selected_piece = piece
-                        selected_piece.dragging = True
-                        offset_x = selected_piece.rect.x - mouse_x
-                        offset_y = selected_piece.rect.y - mouse_y
-                        clicked_on_piece = True
-                        break
+    def setup_menu(self):
+        menubar = self.menuBar()
+        file_menu = menubar.addMenu("Archivo")
 
-                if not clicked_on_piece:
-                    for piece in catalog:
-                        if piece.rect.collidepoint(event.pos):
-                            if isinstance(piece, StraightPiece):
-                                selected_piece = StraightPiece(mouse_x, mouse_y, piece.rect.width, piece.rect.height)
-                            elif isinstance(piece, CurvePiece):
-                                selected_piece = CurvePiece(mouse_x, mouse_y, piece.rect.width, piece.rect.height)
-                            elif isinstance(piece, CrossPiece):
-                                selected_piece = CrossPiece(mouse_x, mouse_y, piece.rect.width, piece.rect.height)
-                            elif isinstance(piece, TRoadPiece):
-                                selected_piece = TRoadPiece(mouse_x, mouse_y, piece.rect.width, piece.rect.height)
+        new_action = QAction("Nuevo", self)
 
-                            selected_piece.dragging = True
-                            offset_x = selected_piece.rect.x - mouse_x
-                            offset_y = selected_piece.rect.y - mouse_y
-                            break
+        open_action = QAction("Abrir", self)
 
-            elif event.button == 3:  # Botón derecho
-                for piece in placed_pieces:
-                    if piece.rect.collidepoint(event.pos):
-                        placed_pieces.remove(piece)
-                        del piece
-                        break
+        save_action = QAction("Guardar", self)
 
-        elif event.type == pygame.MOUSEBUTTONUP:
-            if selected_piece:
-                selected_piece.dragging = False
-                snap_to_closest(selected_piece, placed_pieces)
-                if selected_piece not in placed_pieces:
-                    if selected_piece.rect.colliderect(pygame.Rect(0, 0, WIDTH - CATALOG_WIDTH, HEIGHT)):
-                        placed_pieces.append(selected_piece)
-                selected_piece = None
+        quit_action = QAction("Cerrar", self)
+        quit_action.triggered.connect(QApplication.instance().quit)
 
-        elif event.type == pygame.MOUSEMOTION:
-            if selected_piece and selected_piece.dragging:
-                mouse_x, mouse_y = event.pos
-                selected_piece.rect.x = mouse_x + offset_x
-                selected_piece.rect.y = mouse_y + offset_y
+        file_menu.addAction(new_action)
+        file_menu.addAction(open_action)
+        file_menu.addAction(save_action)
+        file_menu.addSeparator()
+        file_menu.addAction(quit_action)
 
-    # --- Sección de Dibujo ---
-    window.fill(WHITE)
-    pygame.draw.rect(window, BLUE, (WIDTH - CATALOG_WIDTH, 0, CATALOG_WIDTH, CATALOG_HEIGHT))
-    pygame.draw.line(window, DARK_GRAY, (WIDTH - CATALOG_WIDTH, 0), (WIDTH - CATALOG_WIDTH, HEIGHT), 5)
-
-    # Títulos y texto de ayuda
-    catalog_text = font.render("Catálogo", True, BLACK)
-    window.blit(catalog_text, (WIDTH - CATALOG_WIDTH + 65, 10))
-    board_text = font.render("Tablero", True, BLACK)
-    window.blit(board_text, (20, 10))
-    
-    save_text = font.render("G = Guardar", True, BLACK)
-    window.blit(save_text, (WIDTH - CATALOG_WIDTH + 50, HEIGHT - 60))
-    load_text = font.render("C = Cargar", True, BLACK)
-    window.blit(load_text, (WIDTH - CATALOG_WIDTH + 50, HEIGHT - 35))
-
-    # Piezas del catálogo
-    for piece in catalog:
-        piece.draw_catalog(window)
-
-    # --- LÓGICA DE DIBUJO DE PIEZAS ACTUALIZADA ---
-    # Determina si se deben mostrar los puntos de encastre.
-    show_points = selected_piece is not None
-
-    # Dibuja las piezas colocadas
-    for piece in placed_pieces:
-        piece.draw(window, show_snap_points=show_points)
-
-    # Dibuja la pieza que se está arrastrando (si existe)
-    if selected_piece:
-        selected_piece.draw(window, show_snap_points=True)
-
-
-    # --- LÓGICA PARA DIBUJAR EL MENSAJE ---
-    if message_timer > 0:
-        message_surface = font.render(display_message, True, BLACK, GRAY)
-        message_rect = message_surface.get_rect(center=((WIDTH - CATALOG_WIDTH) // 2, 30))
-        window.blit(message_surface, message_rect)
-        message_timer -= 1
-
-    pygame.display.update()
-
-pygame.quit()
-sys.exit()
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec())
