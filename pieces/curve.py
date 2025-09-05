@@ -25,8 +25,6 @@ class CurvePiece(Piece):
         """Actualiza los puntos de encastre basados en la posición y rotación actual de la pieza."""
         center_x, center_y = self.rect.width // 2, self.rect.height // 2
         
-        # Puntos de encastre para la curva en su posición original (0 grados)
-        # Conecta la parte inferior con la izquierda
         points = [
             (self.rect.width // 2, self.rect.height),  # Abajo
             (0, self.rect.height // 2)                 # Izquierda
@@ -34,23 +32,17 @@ class CurvePiece(Piece):
         
         rotated_points = []
         for x, y in points:
-            # Rotamos cada punto alrededor del centro de la pieza
-            rad_angle = math.radians(-self.angle) # Pygame rota en sentido antihorario
+            rad_angle = math.radians(-self.angle)
             new_x = center_x + (x - center_x) * math.cos(rad_angle) - (y - center_y) * math.sin(rad_angle)
             new_y = center_y + (x - center_x) * math.sin(rad_angle) + (y - center_y) * math.cos(rad_angle)
             rotated_points.append((new_x, new_y))
 
         self.snap_points = rotated_points
 
-    def draw(self, surface):
-        # Rotamos la imagen de la pieza
+    def draw(self, surface, show_snap_points=False):
         rotated_surface = pygame.transform.rotate(self.image, self.angle)
-        
-        # Obtenemos el nuevo rectángulo para centrar la imagen rotada
         new_rect = rotated_surface.get_rect(center=self.rect.center)
-        
-        # Dibujamos la pieza en la pantalla
         surface.blit(rotated_surface, new_rect.topleft)
         
-        # Dibujamos los puntos de encastre para ver cómo se mueven
-        self.draw_snap_points(surface)
+        if show_snap_points:
+            self.draw_snap_points(surface)

@@ -42,12 +42,10 @@ class TRoadPiece(Piece):
 
         self.snap_points = rotated_points
 
-    def draw(self, surface):
-        # La pieza de cruce no necesita rotar visualmente si la imagen es simétrica,
-        # pero mantenemos la lógica por si en el futuro usas una imagen no simétrica.
+    def draw(self, surface, show_snap_points=False):
         rotated_surface = pygame.transform.rotate(self.image, self.angle)
         new_rect = rotated_surface.get_rect(center=self.rect.center)
         surface.blit(rotated_surface, new_rect.topleft)
         
-        # Dibuja los puntos de encastre para depuración
-        self.draw_snap_points(surface)
+        if show_snap_points:
+            self.draw_snap_points(surface)

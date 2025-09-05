@@ -46,7 +46,7 @@ process = psutil.Process(os.getpid())
 # Fuente para el texto
 font = pygame.font.SysFont(None, 24)
 
-# --- NUEVAS VARIABLES PARA EL MENSAJE EN PANTALLA ---
+# --- VARIABLES PARA EL MENSAJE EN PANTALLA ---
 display_message = ""
 message_timer = 0
 MESSAGE_DURATION = 90  # 3 segundos a 30 FPS
@@ -76,7 +76,6 @@ while running:
             
             # --- LÓGICA DE GUARDADO Y CARGADO ---
             elif event.key == pygame.K_g: # Tecla G para Guardar
-                # La función ahora devuelve un mensaje que podemos mostrar
                 message = save_track(placed_pieces)
                 display_message = message
                 message_timer = MESSAGE_DURATION
@@ -159,21 +158,24 @@ while running:
     for piece in catalog:
         piece.draw_catalog(window)
 
-    # Piezas colocadas
+    # --- LÓGICA DE DIBUJO DE PIEZAS ACTUALIZADA ---
+    # Determina si se deben mostrar los puntos de encastre.
+    show_points = selected_piece is not None
+
+    # Dibuja las piezas colocadas
     for piece in placed_pieces:
-        piece.draw(window)
+        piece.draw(window, show_snap_points=show_points)
 
+    # Dibuja la pieza que se está arrastrando (si existe)
     if selected_piece:
-        selected_piece.draw(window)
+        selected_piece.draw(window, show_snap_points=True)
 
-    # --- NUEVA LÓGICA PARA DIBUJAR EL MENSAJE ---
+
+    # --- LÓGICA PARA DIBUJAR EL MENSAJE ---
     if message_timer > 0:
-        # Creamos una superficie de texto con un fondo gris para que resalte
         message_surface = font.render(display_message, True, BLACK, GRAY)
-        # Centramos el mensaje en el área del tablero
         message_rect = message_surface.get_rect(center=((WIDTH - CATALOG_WIDTH) // 2, 30))
         window.blit(message_surface, message_rect)
-        # Reducimos el contador para que el mensaje desaparezca
         message_timer -= 1
 
     pygame.display.update()

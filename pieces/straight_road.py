@@ -18,7 +18,6 @@ class StraightPiece(Piece):
             self.original_image = pygame.image.load(StraightPiece.IMAGE_PATH).convert_alpha()
             self.image = pygame.transform.scale(self.original_image, (width, height))
         except pygame.error:
-            # Si la imagen no se encuentra, creamos una superficie negra para que el juego no falle
             print(f"Error: No se pudo cargar la imagen en {StraightPiece.IMAGE_PATH}")
             self.image = pygame.Surface((self.rect.width, self.rect.height))
             self.image.fill((0, 0, 0))
@@ -41,8 +40,10 @@ class StraightPiece(Piece):
 
         self.snap_points = rotated_points
 
-    def draw(self, surface):
+    def draw(self, surface, show_snap_points=False):
         rotated_surface = pygame.transform.rotate(self.image, self.angle)
         new_rect = rotated_surface.get_rect(center=self.rect.center)
         surface.blit(rotated_surface, new_rect.topleft)
-        self.draw_snap_points(surface)
+
+        if show_snap_points:
+            self.draw_snap_points(surface)

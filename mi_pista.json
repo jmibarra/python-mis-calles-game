@@ -1,20 +1,698 @@
 [
     {
         "type": "Straight",
-        "x": 1136,
-        "y": 145,
+        "x": 618,
+        "y": 282,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 718,
+        "y": 282,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1118,
+        "y": 182,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 1118,
+        "y": 282,
+        "angle": 90
+    },
+    {
+        "type": "TRoad",
+        "x": 1118,
+        "y": 82,
+        "angle": 90
+    },
+    {
+        "type": "TRoad",
+        "x": 1118,
+        "y": 382,
+        "angle": 270
+    },
+    {
+        "type": "Straight",
+        "x": 1218,
+        "y": 182,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 1218,
+        "y": 282,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 718,
+        "y": 382,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 618,
+        "y": 382,
         "angle": 0
     },
     {
         "type": "Cross",
-        "x": 1236,
-        "y": 145,
+        "x": 918,
+        "y": 82,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 1018,
+        "y": 82,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1018,
+        "y": 382,
+        "angle": 270
+    },
+    {
+        "type": "TRoad",
+        "x": 918,
+        "y": 382,
+        "angle": 270
+    },
+    {
+        "type": "Straight",
+        "x": 1018,
+        "y": 282,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 1018,
+        "y": 182,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 918,
+        "y": 182,
+        "angle": 90
+    },
+    {
+        "type": "TRoad",
+        "x": 918,
+        "y": 282,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 818,
+        "y": 382,
+        "angle": 270
+    },
+    {
+        "type": "Cross",
+        "x": 818,
+        "y": 282,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 818,
+        "y": 182,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 818,
+        "y": 82,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 918,
+        "y": -18,
+        "angle": 90
+    },
+    {
+        "type": "TRoad",
+        "x": 818,
+        "y": -18,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 718,
+        "y": 82,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 518,
+        "y": 82,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 518,
+        "y": -18,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 718,
+        "y": -18,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 618,
+        "y": -18,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 618,
+        "y": 182,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 718,
+        "y": 182,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 618,
+        "y": 82,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1018,
+        "y": -18,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 1118,
+        "y": -18,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1218,
+        "y": -18,
+        "angle": 90
+    },
+    {
+        "type": "Cross",
+        "x": 1218,
+        "y": 82,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1220,
+        "y": 378,
+        "angle": 270
+    },
+    {
+        "type": "Cross",
+        "x": 518,
+        "y": 182,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 518,
+        "y": 282,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 518,
+        "y": 382,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1320,
+        "y": 378,
+        "angle": 270
+    },
+    {
+        "type": "Straight",
+        "x": 1320,
+        "y": 278,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 1320,
+        "y": 178,
+        "angle": 90
+    },
+    {
+        "type": "TRoad",
+        "x": 1320,
+        "y": -22,
+        "angle": 90
+    },
+    {
+        "type": "Curve",
+        "x": 1520,
+        "y": -22,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1420,
+        "y": -22,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 1520,
+        "y": 178,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 1520,
+        "y": 78,
+        "angle": 90
+    },
+    {
+        "type": "Cross",
+        "x": 1320,
+        "y": 78,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1420,
+        "y": 78,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1420,
+        "y": 178,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 1420,
+        "y": 278,
+        "angle": 90
+    },
+    {
+        "type": "Cross",
+        "x": 518,
+        "y": 482,
         "angle": 0
     },
     {
         "type": "Curve",
-        "x": 1336,
-        "y": 145,
+        "x": 418,
+        "y": 482,
+        "angle": 180
+    },
+    {
+        "type": "Cross",
+        "x": 418,
+        "y": 382,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 418,
+        "y": 282,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 418,
+        "y": 182,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 418,
+        "y": -18,
+        "angle": 90
+    },
+    {
+        "type": "Cross",
+        "x": 418,
+        "y": 82,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 618,
+        "y": 482,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 718,
+        "y": 482,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 818,
+        "y": 482,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 918,
+        "y": 482,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1018,
+        "y": 482,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1118,
+        "y": 482,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1218,
+        "y": 482,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1318,
+        "y": 482,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1318,
+        "y": 582,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1218,
+        "y": 582,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1118,
+        "y": 582,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1018,
+        "y": 582,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 918,
+        "y": 582,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 818,
+        "y": 582,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 718,
+        "y": 582,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 618,
+        "y": 582,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 518,
+        "y": 582,
+        "angle": 180
+    },
+    {
+        "type": "TRoad",
+        "x": 518,
+        "y": 682,
+        "angle": 180
+    },
+    {
+        "type": "Straight",
+        "x": 618,
+        "y": 682,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 718,
+        "y": 682,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1323,
+        "y": 675,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1223,
+        "y": 675,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 1423,
+        "y": 675,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1123,
+        "y": 675,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1023,
+        "y": 675,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 923,
+        "y": 675,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 823,
+        "y": 675,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1323,
+        "y": 775,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1223,
+        "y": 775,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1123,
+        "y": 775,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1023,
+        "y": 775,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 618,
+        "y": 782,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1520,
+        "y": 278,
+        "angle": 90
+    },
+    {
+        "type": "Straight",
+        "x": 923,
+        "y": 775,
+        "angle": 180
+    },
+    {
+        "type": "Straight",
+        "x": 823,
+        "y": 775,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 723,
+        "y": 775,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1520,
+        "y": 378,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1520,
+        "y": 478,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1518,
+        "y": 582,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 1420,
+        "y": 378,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 1420,
+        "y": 478,
+        "angle": 0
+    },
+    {
+        "type": "Cross",
+        "x": 1423,
+        "y": 575,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1518,
+        "y": 682,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1518,
+        "y": 782,
+        "angle": 0
+    },
+    {
+        "type": "Curve",
+        "x": 1518,
+        "y": 882,
+        "angle": 270
+    },
+    {
+        "type": "TRoad",
+        "x": 518,
+        "y": 782,
+        "angle": 180
+    },
+    {
+        "type": "Curve",
+        "x": 518,
+        "y": 882,
+        "angle": 180
+    },
+    {
+        "type": "Cross",
+        "x": 1423,
+        "y": 775,
+        "angle": 0
+    },
+    {
+        "type": "TRoad",
+        "x": 1418,
+        "y": 882,
+        "angle": 270
+    },
+    {
+        "type": "Straight",
+        "x": 1318,
+        "y": 882,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1218,
+        "y": 882,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1118,
+        "y": 882,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 918,
+        "y": 882,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 1018,
+        "y": 882,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 618,
+        "y": 882,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 718,
+        "y": 882,
+        "angle": 0
+    },
+    {
+        "type": "Straight",
+        "x": 818,
+        "y": 882,
         "angle": 0
     }
 ]

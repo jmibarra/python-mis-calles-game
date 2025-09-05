@@ -18,13 +18,13 @@ class Piece:
         """Método abstracto que debe ser implementado por las clases hijas para recalcular los puntos de encastre."""
         raise NotImplementedError("Este método debe ser implementado por las subclases.")
 
-    def draw(self, surface):
+    def draw(self, surface, show_snap_points=False):
         """Método abstracto para dibujar la pieza en la pantalla."""
         raise NotImplementedError("Este método debe ser implementado por las subclases.")
 
     def draw_catalog(self, surface):
-        """Dibuja la pieza en el catálogo con detalles comunes."""
-        self.draw(surface)  # En muchos casos puede ser igual que dibujar en la pantalla principal.
+        """Dibuja la pieza en el catálogo mostrando los puntos de encastre."""
+        self.draw(surface, show_snap_points=True)
 
     def draw_snap_points(self, surface):
         """Dibuja los puntos de encastre para todas las piezas."""
