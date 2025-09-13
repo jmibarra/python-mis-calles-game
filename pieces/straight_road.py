@@ -4,23 +4,16 @@ import math
 
 # Clase para la pieza recta
 class StraightPiece(Piece):
-    # Definimos la ruta de la imagen como una variable de la clase
+    # Definimos la ruta de la imagen y el tipo como variables de la clase
     IMAGE_PATH = "assets/straight_road.png"
     PIECE_TYPE = "Straight"
 
     def __init__(self, x, y, width, height, angle=0):
+        # La clase base Piece ya se encarga de cargar la imagen
         super().__init__(x, y, width, height)
-
         self.angle = angle
-        
-        # Cargamos la imagen usando la ruta definida en la clase
-        try:
-            self.original_image = pygame.image.load(StraightPiece.IMAGE_PATH).convert_alpha()
-            self.image = pygame.transform.scale(self.original_image, (width, height))
-        except pygame.error:
-            print(f"Error: No se pudo cargar la imagen en {StraightPiece.IMAGE_PATH}")
-            self.image = pygame.Surface((self.rect.width, self.rect.height))
-            self.image.fill((0, 0, 0))
+        # Volvemos a llamar a update_snap_points por si el ángulo inicial no es 0
+        self.update_snap_points()
 
     def update_snap_points(self):
         """Actualiza los puntos de encastre basados en la posición y rotación actual de la pieza."""
@@ -39,11 +32,3 @@ class StraightPiece(Piece):
             rotated_points.append((new_x, new_y))
 
         self.snap_points = rotated_points
-
-    def draw(self, surface, show_snap_points=False):
-        rotated_surface = pygame.transform.rotate(self.image, self.angle)
-        new_rect = rotated_surface.get_rect(center=self.rect.center)
-        surface.blit(rotated_surface, new_rect.topleft)
-
-        if show_snap_points:
-            self.draw_snap_points(surface)

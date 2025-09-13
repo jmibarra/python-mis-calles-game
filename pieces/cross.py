@@ -10,17 +10,6 @@ class CrossPiece(Piece):
     def __init__(self, x, y, width, height, angle=0):
         super().__init__(x, y, width, height)
         self.angle = angle
-        
-        # Cargamos la imagen usando la ruta definida en la clase
-        try:
-            self.original_image = pygame.image.load(CrossPiece.IMAGE_PATH).convert_alpha()
-            self.image = pygame.transform.scale(self.original_image, (width, height))
-        except pygame.error:
-            # Si la imagen no se encuentra, creamos una superficie negra
-            print(f"Error: No se pudo cargar la imagen en {CrossPiece.IMAGE_PATH}")
-            self.image = pygame.Surface((self.rect.width, self.rect.height))
-            self.image.fill((0, 0, 0))
-        
         self.update_snap_points()
 
     def update_snap_points(self):
@@ -32,12 +21,3 @@ class CrossPiece(Piece):
             (self.rect.width // 2, self.rect.height),     # Abajo
             (0, self.rect.height // 2)                    # Izquierda
         ]
-
-    def draw(self, surface, show_snap_points=False):
-        rotated_surface = pygame.transform.rotate(self.image, self.angle)
-        new_rect = rotated_surface.get_rect(center=self.rect.center)
-        surface.blit(rotated_surface, new_rect.topleft)
-        
-        # Dibuja los puntos de encastre solo si se indica
-        if show_snap_points:
-            self.draw_snap_points(surface)

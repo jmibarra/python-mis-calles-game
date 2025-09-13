@@ -12,16 +12,6 @@ class TRoadPiece(Piece):
         super().__init__(x, y, width, height)
 
         self.angle = angle
-        
-        # Cargamos la imagen usando la ruta definida en la clase
-        try:
-            self.original_image = pygame.image.load(TRoadPiece.IMAGE_PATH).convert_alpha()
-            self.image = pygame.transform.scale(self.original_image, (width, height))
-        except pygame.error:
-            # Si la imagen no se encuentra, creamos una superficie negra
-            print(f"Error: No se pudo cargar la imagen en {TRoadPiece.IMAGE_PATH}")
-            self.image = pygame.Surface((self.rect.width, self.rect.height))
-            self.image.fill((0, 0, 0))
 
     def update_snap_points(self):
         """Actualiza los puntos de encastre basados en la posición y rotación actual de la pieza."""
@@ -41,11 +31,3 @@ class TRoadPiece(Piece):
             rotated_points.append((new_x, new_y))
 
         self.snap_points = rotated_points
-
-    def draw(self, surface, show_snap_points=False):
-        rotated_surface = pygame.transform.rotate(self.image, self.angle)
-        new_rect = rotated_surface.get_rect(center=self.rect.center)
-        surface.blit(rotated_surface, new_rect.topleft)
-        
-        if show_snap_points:
-            self.draw_snap_points(surface)
