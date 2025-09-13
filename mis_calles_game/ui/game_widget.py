@@ -16,8 +16,21 @@ class GameWidget(QWidget):
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         os.environ['SDL_WINDOWID'] = str(int(self.winId()))
-        pygame.init()
         
+        # 1. Inicializar Pygame y el mezclador de sonidos
+        pygame.init()
+        pygame.mixer.init() # <-- AÑADIR ESTA LÍNEA
+        
+        # 2. Cargar los sonidos
+        try:
+            self.click_sound = pygame.mixer.Sound("assets/sounds/click_sound.wav")
+            self.rotate_sound = pygame.mixer.Sound("assets/sounds/rotate_sound.wav")
+        except pygame.error as e:
+            print(f"Error al cargar los sonidos: {e}")
+            # Asignamos un objeto "dummy" para que el juego no falle si no encuentra los sonidos
+            self.click_sound = None
+            self.rotate_sound = None
+
         self.screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
         try:
@@ -35,7 +48,7 @@ class GameWidget(QWidget):
         self.snap_animation_pos = (0, 0)
     
     def run_game_frame(self):
-        """Dibuja un único fotograma del juego. Llamado por el QTimer."""
+        # ... (el resto de esta función no cambia)
         if self.background_image:
             self.screen.blit(self.background_image, (0, 0))
         else:
@@ -82,8 +95,14 @@ class GameWidget(QWidget):
         if event.key() == Qt.Key.Key_R:
             if self.selected_piece:
                 self.selected_piece.rotate()
+                # --- INICIO DE LA MODIFICACIÓN ---
+                # 3. Reproducir sonido de rotación
+                if self.rotate_sound:
+                    self.rotate_sound.play()
+                # --- FIN DE LA MODIFICACIÓN ---
         self.run_game_frame()
 
+    # ... (mousePressEvent y mouseMoveEvent no cambian)
     def mousePressEvent(self, event):
         mouse_x, mouse_y = int(event.position().x()), int(event.position().y())
         
@@ -115,12 +134,15 @@ class GameWidget(QWidget):
             self.selected_piece.rect.x = mouse_x + self.offset_x
             self.selected_piece.rect.y = mouse_y + self.offset_y
         self.run_game_frame()
-
+        
     def mouseReleaseEvent(self, event):
         if self.selected_piece and event.button().name == 'LeftButton':
             snapped = self.place_selected_piece() 
             
             if snapped:
+                # 3. Reproducir sonido de encastre
+                if self.click_sound:
+                    self.click_sound.play()
                 self.snap_animation_timer = SNAP_ANIMATION_DURATION
                 self.snap_animation_pos = self.selected_piece.rect.center
             
