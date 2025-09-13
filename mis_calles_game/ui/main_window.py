@@ -5,9 +5,9 @@ from PyQt6.QtWidgets import (QMainWindow, QWidget, QHBoxLayout, QFrame,
 from PyQt6.QtGui import QAction
 from PyQt6.QtCore import QTimer
 
-from game_widget import GameWidget
-from catalog import CatalogWidget
-from file_manager import save_track, load_track
+from mis_calles_game.ui.game_widget import GameWidget
+from mis_calles_game.ui.catalog import CatalogWidget
+from mis_calles_game.file_manager import save_track, load_track
 
 class MainWindow(QMainWindow):
     """La ventana principal de nuestra aplicación."""

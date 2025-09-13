@@ -3,8 +3,8 @@ import pygame
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import Qt
 
-from utils import snap_to_closest
-from constants import (GAME_WIDTH, GAME_HEIGHT, BACKGROUND_IMAGE_PATH,
+from mis_calles_game.utils import snap_to_closest
+from mis_calles_game.constants import (GAME_WIDTH, GAME_HEIGHT, BACKGROUND_IMAGE_PATH,
                          DEFAULT_SNAP_COLOR, HIGHLIGHT_COLOR, SNAP_DISTANCE,
                          SNAP_ANIMATION_DURATION)
 

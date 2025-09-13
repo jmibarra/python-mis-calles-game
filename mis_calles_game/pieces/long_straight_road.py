@@ -1,7 +1,7 @@
 # jmibarra/python-mis-calles-game/python-mis-calles-game-277952323df0b1e4a23e205892c6a01f2c59a922/pieces/long_straight_road.py
 
 import pygame
-from pieces.straight_road import StraightPiece # Reutilizamos la lógica de la pieza recta
+from mis_calles_game.pieces.straight_road import StraightPiece # Reutilizamos la lógica de la pieza recta
 import math
 
 # Clase para la pieza recta larga

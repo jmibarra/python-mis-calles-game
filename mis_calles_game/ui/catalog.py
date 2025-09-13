@@ -5,13 +5,13 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import QSize
 
-from pieces.straight_road import StraightPiece
-from pieces.long_straight_road import LongStraightPiece
-from pieces.curve import CurvePiece
-from pieces.cross import CrossPiece
-from pieces.t_road import TRoadPiece
+from mis_calles_game.pieces.straight_road import StraightPiece
+from mis_calles_game.pieces.long_straight_road import LongStraightPiece
+from mis_calles_game.pieces.curve import CurvePiece
+from mis_calles_game.pieces.cross import CrossPiece
+from mis_calles_game.pieces.t_road import TRoadPiece
 
-from constants import CATALOG_WIDTH
+from mis_calles_game.constants import CATALOG_WIDTH
 
 class CatalogWidget(QWidget):
     def __init__(self, game_widget, parent=None):

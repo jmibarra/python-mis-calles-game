@@ -1,6 +1,6 @@
 import pygame
 import math
-from pieces.piece import Piece
+from mis_calles_game.pieces.piece import Piece
 
 # Clase derivada para una curva
 class CurvePiece(Piece):

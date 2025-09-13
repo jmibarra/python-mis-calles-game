@@ -1,26 +1,27 @@
 import pygame
-from pieces.piece import Piece
+from mis_calles_game.pieces.piece import Piece
 import math
 
-# Clase derivada para un cruce
-class TRoadPiece(Piece):
-    # Definimos la ruta de la imagen como una variable de la clase
-    IMAGE_PATH = "assets/t_road.png"
-    PIECE_TYPE = "TRoad"
+# Clase para la pieza recta
+class StraightPiece(Piece):
+    # Definimos la ruta de la imagen y el tipo como variables de la clase
+    IMAGE_PATH = "assets/straight_road.png"
+    PIECE_TYPE = "Straight"
 
     def __init__(self, x, y, width, height, angle=0):
+        # La clase base Piece ya se encarga de cargar la imagen
         super().__init__(x, y, width, height)
-
         self.angle = angle
+        # Volvemos a llamar a update_snap_points por si el ángulo inicial no es 0
+        self.update_snap_points()
 
     def update_snap_points(self):
         """Actualiza los puntos de encastre basados en la posición y rotación actual de la pieza."""
         center_x, center_y = self.rect.width // 2, self.rect.height // 2
 
         points = [
-            (self.rect.width // 2, 0),                    # Arriba
-            (self.rect.width // 2, self.rect.height),     # Abajo
-            (0, self.rect.height // 2)                    # Izquierda
+            (0, center_y),  # Izquierda
+            (self.rect.width, center_y)  # Derecha
         ]
 
         rotated_points = []

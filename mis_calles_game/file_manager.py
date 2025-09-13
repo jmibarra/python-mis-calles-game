@@ -1,9 +1,9 @@
 import json
-from pieces.cross import CrossPiece
-from pieces.straight_road import StraightPiece
-from pieces.curve import CurvePiece
-from pieces.t_road import TRoadPiece
-from pieces.long_straight_road import LongStraightPiece
+from mis_calles_game.pieces.cross import CrossPiece
+from mis_calles_game.pieces.straight_road import StraightPiece
+from mis_calles_game.pieces.curve import CurvePiece
+from mis_calles_game.pieces.t_road import TRoadPiece
+from mis_calles_game.pieces.long_straight_road import LongStraightPiece
 
 # Diccionario para mapear los nombres de las piezas a sus clases
 PIECE_CLASSES = {
