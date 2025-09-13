@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
             {"label": "Curva", "icon": "assets/curve.png", "class": CurvePiece},
             {"label": "Cruce", "icon": "assets/cross.png", "class": CrossPiece},
             {"label": "Cruce en T", "icon": "assets/t_road.png", "class": TRoadPiece},
-            #{"label": "Recta Larga", "icon": "assets/long_straight_road.png", "class": LongStraightPiece},
+            {"label": "Recta Larga", "icon": "assets/long_straight_road.png", "class": LongStraightPiece},
         ]
 
         for item in catalog_items:
