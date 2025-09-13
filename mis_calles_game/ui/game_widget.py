@@ -25,11 +25,13 @@ class GameWidget(QWidget):
         try:
             self.click_sound = pygame.mixer.Sound("assets/sounds/click_sound.wav")
             self.rotate_sound = pygame.mixer.Sound("assets/sounds/rotate_sound.wav")
+            self.erase_sound = pygame.mixer.Sound("assets/sounds/erase_sound.wav")
         except pygame.error as e:
             print(f"Error al cargar los sonidos: {e}")
             # Asignamos un objeto "dummy" para que el juego no falle si no encuentra los sonidos
             self.click_sound = None
             self.rotate_sound = None
+            self.erase_sound = None
 
         self.screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
@@ -125,6 +127,8 @@ class GameWidget(QWidget):
                     self.placed_pieces.remove(piece)
                     del piece
                     self.selected_piece = None
+                    if self.erase_sound:
+                        self.erase_sound.play()
                     break
         self.run_game_frame()
 
