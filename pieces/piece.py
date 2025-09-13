@@ -4,7 +4,6 @@ import pygame
 
 # Clase base Piece
 class Piece:
-    # Diccionario para almacenar las imágenes ya cargadas y no leerlas del disco repetidamente
     _images_cache = {}
 
     def __init__(self, x, y, width, height):
@@ -12,7 +11,6 @@ class Piece:
         self.dragging = False
         self.angle = 0  # Ángulo de rotación de la pieza
         
-        # Cargar la imagen usando la ruta definida en la clase hija
         if self.IMAGE_PATH not in Piece._images_cache:
             try:
                 original_image = pygame.image.load(self.IMAGE_PATH).convert_alpha()
@@ -26,11 +24,10 @@ class Piece:
         if original_image:
             self.image = pygame.transform.scale(original_image, (width, height))
         else:
-            # Si la imagen no se pudo cargar, creamos una superficie negra
-            self.image = pygame.Surface((self.rect.width, self.rect.height))
-            self.image.fill((0, 0, 0))
+            self.image = pygame.Surface((self.rect.width, self.rect.height), pygame.SRCALPHA) # Añadimos SRCALPHA para transparencia
+            self.image.fill((0, 0, 0, 0)) # Transparente
 
-        self.snap_points = []  # Inicializamos los puntos de encastre
+        self.snap_points = []  # Inicializamos los puntos de encastre (relativos a la pieza)
         self.update_snap_points()  # Calculamos los puntos de encastre al crear la pieza
 
     def rotate(self):
@@ -42,21 +39,33 @@ class Piece:
         """Método abstracto que debe ser implementado por las clases hijas para recalcular los puntos de encastre."""
         raise NotImplementedError("Este método debe ser implementado por las subclases.")
 
-    def draw(self, surface, show_snap_points=False):
+    def get_global_snap_points(self):
+        """Devuelve los puntos de encastre en coordenadas globales."""
+        global_points = []
+        for point in self.snap_points:
+            global_points.append((self.rect.x + point[0], self.rect.y + point[1]))
+        return global_points
+
+    def draw(self, surface, show_snap_points=False, snap_point_colors=None):
         """Dibuja la pieza rotada en la pantalla."""
         rotated_surface = pygame.transform.rotate(self.image, self.angle)
         new_rect = rotated_surface.get_rect(center=self.rect.center)
         surface.blit(rotated_surface, new_rect.topleft)
         
         if show_snap_points:
-            self.draw_snap_points(surface)
+            self.draw_snap_points(surface, snap_point_colors) # Pasamos los colores
 
-    def draw_snap_points(self, surface):
-        """Dibuja los puntos de encastre para todas las piezas."""
-        for point in self.snap_points:
-            global_x = self.rect.x + point[0]
-            global_y = self.rect.y + point[1]
-            pygame.draw.circle(surface, (255, 0, 0), (global_x, global_y), 5)
+    def draw_snap_points(self, surface, snap_point_colors=None):
+        """Dibuja los puntos de encastre para todas las piezas, con colores opcionales."""
+        if snap_point_colors is None:
+            snap_point_colors = [(255, 0, 0)] * len(self.snap_points) # Rojo por defecto para todos
+        
+        for i, point in enumerate(self.snap_points):
+            global_x = int(self.rect.x + point[0]) # Asegurarse de que son enteros para pygame.draw.circle
+            global_y = int(self.rect.y + point[1])
+            
+            color = snap_point_colors[i] if i < len(snap_point_colors) else (255, 0, 0)
+            pygame.draw.circle(surface, color, (global_x, global_y), 5)
 
     def to_dict(self):
         """Serializa el estado de la pieza a un diccionario."""
