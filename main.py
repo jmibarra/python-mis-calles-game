@@ -11,6 +11,7 @@ from pieces.cross import CrossPiece
 from pieces.straight_road import StraightPiece
 from pieces.curve import CurvePiece
 from pieces.t_road import TRoadPiece
+from pieces.long_straight_road import LongStraightPiece
 from utils import snap_to_closest
 from file_manager import save_track, load_track
 
@@ -137,6 +138,7 @@ class MainWindow(QMainWindow):
             {"label": "Curva", "icon": "assets/curve.png", "class": CurvePiece},
             {"label": "Cruce", "icon": "assets/cross.png", "class": CrossPiece},
             {"label": "Cruce en T", "icon": "assets/t_road.png", "class": TRoadPiece},
+            #{"label": "Recta Larga", "icon": "assets/long_straight_road.png", "class": LongStraightPiece},
         ]
 
         for item in catalog_items:

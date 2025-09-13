@@ -3,13 +3,15 @@ from pieces.cross import CrossPiece
 from pieces.straight_road import StraightPiece
 from pieces.curve import CurvePiece
 from pieces.t_road import TRoadPiece
+from pieces.long_straight_road import LongStraightPiece
 
 # Diccionario para mapear los nombres de las piezas a sus clases
 PIECE_CLASSES = {
     "Cross": CrossPiece,
     "Straight": StraightPiece,
     "Curve": CurvePiece,
-    "TRoad": TRoadPiece
+    "TRoad": TRoadPiece,
+    "LongStraight": LongStraightPiece
 }
 PIECE_SIZE = 100
 
