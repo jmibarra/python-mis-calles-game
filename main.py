@@ -20,19 +20,30 @@ GAME_WIDTH, GAME_HEIGHT = 1600, 1000
 CATALOG_WIDTH = 200
 WHITE = (255, 255, 255)
 PIECE_SIZE = 100
+BACKGROUND_IMAGE_PATH = "assets/grass_background.png" # Asegúrate de que esta ruta sea correcta
 
 class GameWidget(QWidget):
     """El widget que contiene nuestro lienzo de Pygame y su lógica."""
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setFixedSize(GAME_WIDTH, GAME_HEIGHT)
-        # --- NUEVO: Permitimos que este widget reciba el foco del teclado ---
+       
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         # Incrustamos Pygame en este widget
         os.environ['SDL_WINDOWID'] = str(int(self.winId()))
         pygame.init()
         self.screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
+
+        # --- Cargar la imagen de fondo UNA SOLA VEZ al inicio ---
+        try:
+            # Cargamos la imagen y la escalamos para que cubra todo el tamaño del juego
+            original_bg_image = pygame.image.load(BACKGROUND_IMAGE_PATH).convert()
+            self.background_image = pygame.transform.scale(original_bg_image, (GAME_WIDTH, GAME_HEIGHT))
+        except pygame.error:
+            print(f"Error: No se pudo cargar la imagen de fondo en {BACKGROUND_IMAGE_PATH}")
+            self.background_image = None
+        # --------------------------------------------------------
 
         # --- Estado del Juego ---
         self.placed_pieces = []
@@ -41,7 +52,13 @@ class GameWidget(QWidget):
     
     def run_game_frame(self):
         """Dibuja un único fotograma del juego."""
-        self.screen.fill(WHITE)
+        # --- DIBUJAR LA IMAGEN DE FONDO PRIMERO ---
+        if self.background_image:
+            self.screen.blit(self.background_image, (0, 0))
+        else:
+            # Si no se pudo cargar la imagen, usa un color de fondo sólido (verde)
+            self.screen.fill((100, 200, 100)) # Un verde por defecto
+        # -------------------------------------------
         
         show_points = self.selected_piece is not None
         for piece in self.placed_pieces:
@@ -59,6 +76,15 @@ class GameWidget(QWidget):
             # Si hay una pieza seleccionada, la rotamos
             if self.selected_piece:
                 self.selected_piece.rotate()
+        # --- NUEVO: Alternar puntos de encastre con la tecla 'S' ---
+        elif event.key() == Qt.Key.Key_S:
+            # No hay una variable directa en GameWidget para esto,
+            # pero podríamos pasar la lógica a las piezas o crear un método.
+            # Por ahora, si quieres que los puntos se muestren SIEMPRE para la pieza seleccionada
+            # o NUNCA, puedes quitar la lógica 'show_points' de run_game_frame.
+            # Si quieres un toggle global, necesitaríamos una variable aquí.
+            pass # Implementación pendiente si se desea un toggle global
+        # -----------------------------------------------------------
 
     # --- Métodos para manejar la Interacción del Mouse ---
     def mousePressEvent(self, event):
@@ -74,6 +100,7 @@ class GameWidget(QWidget):
                     clicked_on_piece = True
                     break
             
+            # Si no se hizo clic en una pieza existente y hay una pieza seleccionada (arrastrándose desde el catálogo)
             if not clicked_on_piece and self.selected_piece:
                 self.place_selected_piece()
 
@@ -81,7 +108,8 @@ class GameWidget(QWidget):
             for piece in self.placed_pieces:
                 if piece.rect.collidepoint(mouse_x, mouse_y):
                     self.placed_pieces.remove(piece)
-                    del piece
+                    del piece # Liberar la pieza de la memoria
+                    self.selected_piece = None # Asegurarse de que no estamos arrastrando una pieza eliminada
                     break
     
     def mouseMoveEvent(self, event):
@@ -110,6 +138,8 @@ class GameWidget(QWidget):
 
 
 class MainWindow(QMainWindow):
+    # ... (El resto de la clase MainWindow no cambia) ...
+
     """La ventana principal de nuestra aplicación híbrida."""
     def __init__(self):
         super().__init__()
