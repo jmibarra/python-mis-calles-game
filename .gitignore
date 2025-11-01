@@ -163,3 +163,4 @@ cython_debug/
 
 #Ignoro los juegos guardados
 saved_games/
+.DS_Store
