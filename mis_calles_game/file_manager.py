@@ -4,6 +4,7 @@ from mis_calles_game.pieces.straight_road import StraightPiece
 from mis_calles_game.pieces.curve import CurvePiece
 from mis_calles_game.pieces.t_road import TRoadPiece
 from mis_calles_game.pieces.long_straight_road import LongStraightPiece
+from mis_calles_game.constants import PIECE_SIZE
 
 # Diccionario para mapear los nombres de las piezas a sus clases
 PIECE_CLASSES = {
@@ -13,7 +14,6 @@ PIECE_CLASSES = {
     "TRoad": TRoadPiece,
     "LongStraight": LongStraightPiece
 }
-PIECE_SIZE = 100
 
 def save_track(placed_pieces, filepath):
     track_data = [piece.to_dict() for piece in placed_pieces]
