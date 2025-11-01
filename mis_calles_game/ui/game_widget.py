@@ -19,7 +19,7 @@ class GameWidget(QWidget):
         
         # 1. Inicializar Pygame y el mezclador de sonidos
         pygame.init()
-        pygame.mixer.init() # <-- AÑADIR ESTA LÍNEA
+        pygame.mixer.init()
         
         # 2. Cargar los sonidos
         try:
@@ -50,7 +50,6 @@ class GameWidget(QWidget):
         self.snap_animation_pos = (0, 0)
     
     def run_game_frame(self):
-        # ... (el resto de esta función no cambia)
         if self.background_image:
             self.screen.blit(self.background_image, (0, 0))
         else:
@@ -104,7 +103,6 @@ class GameWidget(QWidget):
                 # --- FIN DE LA MODIFICACIÓN ---
         self.run_game_frame()
 
-    # ... (mousePressEvent y mouseMoveEvent no cambian)
     def mousePressEvent(self, event):
         mouse_x, mouse_y = int(event.position().x()), int(event.position().y())
         
