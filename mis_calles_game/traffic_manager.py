@@ -8,6 +8,10 @@ class TrafficManager:
         self.cars = pygame.sprite.Group()
         self.spawn_timer = 0
         self.SPAWN_RATE = 120 # Frames between spawn attempts
+        self.active = True
+
+    def set_active(self, active):
+        self.active = active
 
     def update(self):
         self.cars.update()
@@ -24,11 +28,12 @@ class TrafficManager:
                 else:
                     car.kill()
 
-        # Attempt spawn
-        self.spawn_timer += 1
-        if self.spawn_timer >= self.SPAWN_RATE:
-            self.spawn_timer = 0
-            self.spawn_car()
+        # Attempt spawn only if active
+        if self.active:
+            self.spawn_timer += 1
+            if self.spawn_timer >= self.SPAWN_RATE:
+                self.spawn_timer = 0
+                self.spawn_car()
 
     def spawn_car(self):
         placed_pieces = self.game_widget.placed_pieces

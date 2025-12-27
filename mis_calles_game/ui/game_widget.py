@@ -187,3 +187,7 @@ class GameWidget(QWidget):
         mouse_pos = pygame.mouse.get_pos()
         self.selected_piece = piece_class(mouse_pos[0], mouse_pos[1], 100, 100) # PIECE_SIZE
         self.run_game_frame()
+
+    def set_traffic_enabled(self, enabled):
+        """Habilita o deshabilita la generación de tráfico."""
+        self.traffic_manager.set_active(enabled)
