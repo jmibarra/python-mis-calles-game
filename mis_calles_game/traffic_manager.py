@@ -61,10 +61,12 @@ class TrafficManager:
 
     def get_next_path(self, current_end_point):
         """
-        Busca una pieza conectada y devuelve una nueva ruta que comience cerca de current_end_point.
+        Busca una pieza conectada y devuelve una nueva ruta aleatoria que comience cerca de current_end_point.
         """
         placed_pieces = self.game_widget.placed_pieces
         search_radius = 5 # Tolerance for connection
+        
+        valid_paths = []
 
         for piece in placed_pieces:
             # First check if piece is close enough to be worth checking paths (optimization)
@@ -82,11 +84,14 @@ class TrafficManager:
                 # Check distance
                 dist = (start_point_global[0] - current_end_point[0])**2 + (start_point_global[1] - current_end_point[1])**2
                 if dist < search_radius**2:
-                    # Found a match! Return this path in global coords
+                    # Found a match! Add this path in global coords
                     path_global = []
                     for point in path:
                          path_global.append((piece.rect.x + point[0], piece.rect.y + point[1]))
-                    return path_global
+                    valid_paths.append(path_global)
+        
+        if valid_paths:
+            return random.choice(valid_paths)
         
         return None
 
