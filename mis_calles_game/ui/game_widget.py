@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt
 
 from mis_calles_game.utils import snap_to_closest, find_best_snap_match
 from mis_calles_game.resource_manager import ResourceManager
+from mis_calles_game.traffic_manager import TrafficManager
 from mis_calles_game.constants import (GAME_WIDTH, GAME_HEIGHT, BACKGROUND_IMAGE_PATH,
                          DEFAULT_SNAP_COLOR, HIGHLIGHT_COLOR, SNAP_DISTANCE,
                          SNAP_ANIMATION_DURATION)
@@ -41,6 +42,8 @@ class GameWidget(QWidget):
 
         self.snap_animation_timer = 0
         self.snap_animation_pos = (0, 0)
+        
+        self.traffic_manager = TrafficManager(self)
     
     def run_game_frame(self):
         """El bucle principal del juego: Actualiza estado y dibuja."""
@@ -49,8 +52,7 @@ class GameWidget(QWidget):
         
     def update_game_state(self):
         """Actualiza la lógica del juego (sin dibujar)."""
-        # Aquí iría lógica de actualización de físicas si la hubiera
-        pass
+        self.traffic_manager.update()
 
     def draw_game(self):
         """Dibuja el estado actual del juego en la pantalla."""
@@ -82,6 +84,8 @@ class GameWidget(QWidget):
         
         if self.selected_piece:
             self.selected_piece.draw(self.screen, show_snap_points=True) 
+        
+        self.traffic_manager.draw(self.screen)
         
         self.draw_snap_animation()
 

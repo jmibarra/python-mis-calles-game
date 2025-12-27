@@ -19,16 +19,37 @@ class StraightPiece(Piece):
         """Actualiza los puntos de encastre basados en la posición y rotación actual de la pieza."""
         center_x, center_y = self.rect.width // 2, self.rect.height // 2
 
-        points = [
-            (0, center_y),  # Izquierda
-            (self.rect.width, center_y)  # Derecha
-        ]
+        # Si asumimos que la imagen original es Horizontal (0 grados = Horizontal)
+        # Entonces 0/180 deben tener puntos izquierda/derecha.
+        points = []
+        if self.angle == 0 or self.angle == 180:
+             points = [(0, center_y), (self.rect.width, center_y)]
+        elif self.angle == 90 or self.angle == 270:
+             points = [(center_x, 0), (center_x, self.rect.height)]
+        
+        # Nota: La lógica anterior de rotación manual de puntos era redundante si definimos los puntos explícitamente por ángulo
+        # Simplificamos asignando directamente según el ángulo visual final
+        
+        # Debemos asegurar que los puntos sean relativos (x, y)
+        self.snap_points = points
 
-        rotated_points = []
-        for x, y in points:
-            rad_angle = math.radians(-self.angle)
-            new_x = center_x + (x - center_x) * math.cos(rad_angle) - (y - center_y) * math.sin(rad_angle)
-            new_y = center_y + (x - center_x) * math.sin(rad_angle) + (y - center_y) * math.cos(rad_angle)
-            rotated_points.append((new_x, new_y))
-
-        self.snap_points = rotated_points
+    def get_paths(self):
+        """Define rutas rectas según el ángulo."""
+        paths = []
+        
+        # Ahora 0/180 es Horizontal
+        if self.angle == 0 or self.angle == 180:
+             # Carril "Derecha" (Top lane in standard view?)
+             # Vamos a centralizarlos un poco más: 40 y 60
+             paths.append([(0, 60), (100, 60)])
+             # Carril "Izquierda"
+             paths.append([(100, 40), (0, 40)])
+        
+        # Ahora 90/270 es Vertical
+        elif self.angle == 90 or self.angle == 270:
+             # Carril "Baja"
+             paths.append([(40, 0), (40, 100)]) 
+             # Carril "Sube"
+             paths.append([(60, 100), (60, 0)])
+             
+        return paths
