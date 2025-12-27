@@ -3,7 +3,8 @@ import pygame
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import Qt
 
-from mis_calles_game.utils import snap_to_closest
+from mis_calles_game.utils import snap_to_closest, find_best_snap_match
+from mis_calles_game.resource_manager import ResourceManager
 from mis_calles_game.constants import (GAME_WIDTH, GAME_HEIGHT, BACKGROUND_IMAGE_PATH,
                          DEFAULT_SNAP_COLOR, HIGHLIGHT_COLOR, SNAP_DISTANCE,
                          SNAP_ANIMATION_DURATION)
@@ -22,24 +23,16 @@ class GameWidget(QWidget):
         pygame.mixer.init()
         
         # 2. Cargar los sonidos
-        try:
-            self.click_sound = pygame.mixer.Sound("assets/sounds/click_sound.wav")
-            self.rotate_sound = pygame.mixer.Sound("assets/sounds/rotate_sound.wav")
-            self.erase_sound = pygame.mixer.Sound("assets/sounds/erase_sound.wav")
-        except pygame.error as e:
-            print(f"Error al cargar los sonidos: {e}")
-            # Asignamos un objeto "dummy" para que el juego no falle si no encuentra los sonidos
-            self.click_sound = None
-            self.rotate_sound = None
-            self.erase_sound = None
+        self.click_sound = ResourceManager.get_sound("assets/sounds/click_sound.wav")
+        self.rotate_sound = ResourceManager.get_sound("assets/sounds/rotate_sound.wav")
+        self.erase_sound = ResourceManager.get_sound("assets/sounds/erase_sound.wav")
 
         self.screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
-        try:
-            original_bg_image = pygame.image.load(BACKGROUND_IMAGE_PATH).convert()
-            self.background_image = pygame.transform.scale(original_bg_image, (GAME_WIDTH, GAME_HEIGHT))
-        except pygame.error:
-            print(f"Error: No se pudo cargar la imagen de fondo en {BACKGROUND_IMAGE_PATH}")
+        original_bg_image = ResourceManager.get_image(BACKGROUND_IMAGE_PATH)
+        if original_bg_image:
+             self.background_image = pygame.transform.scale(original_bg_image, (GAME_WIDTH, GAME_HEIGHT))
+        else:
             self.background_image = None
         
         self.placed_pieces = []
@@ -50,6 +43,17 @@ class GameWidget(QWidget):
         self.snap_animation_pos = (0, 0)
     
     def run_game_frame(self):
+        """El bucle principal del juego: Actualiza estado y dibuja."""
+        self.update_game_state()
+        self.draw_game()
+        
+    def update_game_state(self):
+        """Actualiza la lógica del juego (sin dibujar)."""
+        # Aquí iría lógica de actualización de físicas si la hubiera
+        pass
+
+    def draw_game(self):
+        """Dibuja el estado actual del juego en la pantalla."""
         if self.background_image:
             self.screen.blit(self.background_image, (0, 0))
         else:
@@ -57,28 +61,34 @@ class GameWidget(QWidget):
         
         show_points = self.selected_piece is not None
         
+        # Pre-calculamos el mejor snap match para el selected_piece
+        best_snap_match = None
+        if self.selected_piece:
+             best_snap_match = find_best_snap_match(self.selected_piece, self.placed_pieces)
+
         for piece in self.placed_pieces:
             snap_point_colors = [DEFAULT_SNAP_COLOR] * len(piece.snap_points)
             
-            if self.selected_piece:
-                global_snap_points_placed = piece.get_global_snap_points()
-                global_snap_points_selected = self.selected_piece.get_global_snap_points()
-
-                for i, global_point_placed in enumerate(global_snap_points_placed):
-                    for global_point_selected in global_snap_points_selected:
-                        dist_sq = (global_point_placed[0] - global_point_selected[0])**2 + \
-                                  (global_point_placed[1] - global_point_selected[1])**2
-                        
-                        if dist_sq < SNAP_DISTANCE**2:
-                            snap_point_colors[i] = HIGHLIGHT_COLOR
-                            break
+            # Si hay un match, resaltamos el punto específico en la pieza colocada
+            if best_snap_match and best_snap_match['other_piece_rect'] == piece.rect:
+                 # Necesitamos encontrar el índice del punto en la pieza para cambiar su color
+                 # Como other_piece_snap_point es una tupla, la comparamos
+                 for i, pt in enumerate(piece.snap_points):
+                     if pt == best_snap_match['other_piece_snap_point']:
+                         snap_point_colors[i] = HIGHLIGHT_COLOR
+                         break
             
             piece.draw(self.screen, show_snap_points=show_points, snap_point_colors=snap_point_colors)
         
         if self.selected_piece:
             self.selected_piece.draw(self.screen, show_snap_points=True) 
+        
+        self.draw_snap_animation()
 
-        if self.snap_animation_timer > 0:
+        pygame.display.update()
+
+    def draw_snap_animation(self):
+         if self.snap_animation_timer > 0:
             self.snap_animation_timer -= 1
             
             alpha = int(255 * (self.snap_animation_timer / SNAP_ANIMATION_DURATION))
@@ -88,8 +98,6 @@ class GameWidget(QWidget):
             pygame.draw.circle(temp_surface, (255, 255, 255, alpha), (radius, radius), radius) 
             
             self.screen.blit(temp_surface, (self.snap_animation_pos[0] - radius, self.snap_animation_pos[1] - radius))
-
-        pygame.display.update()
 
     def keyPressEvent(self, event):
         """Captura las pulsaciones de teclas cuando este widget tiene el foco."""

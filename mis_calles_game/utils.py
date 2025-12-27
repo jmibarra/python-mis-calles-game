@@ -4,15 +4,17 @@ import pygame
 # Distancia mínima para que una pieza se considere "cerca" de otra
 SNAP_DISTANCE = 50
 
-def snap_to_closest(piece, placed_pieces):
-    """Encaja la pieza en el punto más cercano de otras piezas si es posible."""
+def find_best_snap_match(piece, placed_pieces):
+    """
+    Encuentra el mejor punto de encastre para una pieza sin moverla.
+    Retorna un diccionario con la info del encastre o None si no hay ninguno cerca.
+    """
     best_snap = None
     min_distance = float('inf')
 
     # Verifica que la pieza tenga puntos de encastre
     if not piece.snap_points:
-        print("La pieza no tiene puntos de encastre.")
-        return
+        return None
 
     for other_piece in placed_pieces:
         if other_piece == piece or not other_piece.snap_points:
@@ -36,13 +38,21 @@ def snap_to_closest(piece, placed_pieces):
                     best_snap = {
                         "piece_snap_point": point,
                         "other_piece_rect": other_piece.rect,
-                        "other_piece_snap_point": other_point
+                        "other_piece_snap_point": other_point,
+                        "distance": distance
                     }
+    
+    if best_snap and best_snap["distance"] < SNAP_DISTANCE:
+         return best_snap
+    
+    return None
 
-    # Si se encuentra el mejor punto de encastre y está dentro del rango
-    if best_snap and min_distance < SNAP_DISTANCE:
-        print(f"Se encontró punto de encastre cercano. Distancia mínima: {min_distance}")
-        
+def snap_to_closest(piece, placed_pieces):
+    """Encaja la pieza en el punto más cercano de otras piezas si es posible."""
+    best_snap = find_best_snap_match(piece, placed_pieces)
+
+    # Si se encuentra el mejor punto de encastre
+    if best_snap:
         # Extraemos la información del mejor punto de anclaje
         piece_snap_point = best_snap["piece_snap_point"]
         other_piece_rect = best_snap["other_piece_rect"]
@@ -55,8 +65,9 @@ def snap_to_closest(piece, placed_pieces):
         # Actualizar la posición de la pieza
         piece.rect.x = new_x
         piece.rect.y = new_y
+        print(f"Se encontró punto de encastre cercano. Distancia mínima: {best_snap['distance']}")
     else:
-        print(f"No se encontró punto de encastre cercano. Distancia mínima encontrada: {min_distance}")
+        print(f"No se encontró punto de encastre cercano.")
 
 
 def are_points_close(point1, point2, threshold=50):

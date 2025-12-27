@@ -2,27 +2,19 @@
 
 import pygame
 
+from mis_calles_game.resource_manager import ResourceManager
+
 # Clase base Piece
 class Piece:
-    _images_cache = {}
-
     def __init__(self, x, y, width, height):
         self.rect = pygame.Rect(x, y, width, height)
         self.dragging = False
         self.angle = 0  # Ángulo de rotación de la pieza
         
-        if self.IMAGE_PATH not in Piece._images_cache:
-            try:
-                original_image = pygame.image.load(self.IMAGE_PATH).convert_alpha()
-                Piece._images_cache[self.IMAGE_PATH] = original_image
-            except pygame.error:
-                print(f"Error: No se pudo cargar la imagen en {self.IMAGE_PATH}")
-                Piece._images_cache[self.IMAGE_PATH] = None
-        
-        original_image = Piece._images_cache[self.IMAGE_PATH]
+        self.image = ResourceManager.get_image(self.IMAGE_PATH)
 
-        if original_image:
-            self.image = pygame.transform.scale(original_image, (width, height))
+        if self.image:
+             self.image = pygame.transform.scale(self.image, (width, height))
         else:
             self.image = pygame.Surface((self.rect.width, self.rect.height), pygame.SRCALPHA) # Añadimos SRCALPHA para transparencia
             self.image.fill((0, 0, 0, 0)) # Transparente
