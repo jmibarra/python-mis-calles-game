@@ -31,6 +31,13 @@ class Piece:
         """Método abstracto que debe ser implementado por las clases hijas para recalcular los puntos de encastre."""
         raise NotImplementedError("Este método debe ser implementado por las subclases.")
 
+    def get_paths(self):
+        """
+        Devuelve una lista de rutas (listas de coordenadas) relativas a la pieza.
+        Por defecto devuelve una lista vacía.
+        """
+        return []
+
     def get_global_snap_points(self):
         """Devuelve los puntos de encastre en coordenadas globales."""
         global_points = []

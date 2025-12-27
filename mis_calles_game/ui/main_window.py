@@ -57,6 +57,15 @@ class MainWindow(QMainWindow):
             if label == "Guardar Como...":
                 file_menu.addSeparator()
 
+        # Menú Opciones
+        options_menu = menubar.addMenu("Opciones")
+        
+        self.traffic_action = QAction("Activar Tráfico", self)
+        self.traffic_action.setCheckable(True)
+        self.traffic_action.setChecked(True) # Activado por defecto
+        self.traffic_action.triggered.connect(self.toggle_traffic)
+        options_menu.addAction(self.traffic_action)
+
     def setup_timer(self):
         self.timer = QTimer(self)
         self.timer.setInterval(33) # ~30 FPS
@@ -90,3 +99,8 @@ class MainWindow(QMainWindow):
                 filepath += '.json'
             save_track(self.game_widget.placed_pieces, filepath)
             self.current_track_path = filepath
+
+    def toggle_traffic(self, checked):
+        """Activa o desactiva el tráfico."""
+        if self.game_widget:
+            self.game_widget.set_traffic_enabled(checked)

@@ -29,3 +29,30 @@ class CurvePiece(Piece):
             rotated_points.append((new_x, new_y))
 
         self.snap_points = rotated_points
+
+    def get_paths(self):
+        """Define rutas para la curva. Usamos las rutas base de 0 grados y las rotamos."""
+        # Angle 0: Connects Left and Bottom.
+        # Lane 1 (Outer? Left->Bottom): (0, 60) -> (60, 60) -> (60, 100)
+        # Lane 2 (Inner? Bottom->Left): (40, 100) -> (40, 40) -> (0, 40)
+        
+        base_paths = [
+            [(0, 60), (60, 60), (60, 100)],
+            [(40, 100), (40, 40), (0, 40)]
+        ]
+        
+        # Center for rotation
+        center_x, center_y = self.rect.width // 2, self.rect.height // 2
+        
+        transformed_paths = []
+        for path in base_paths:
+            new_path = []
+            for x, y in path:
+                # Same rotation logic as snap points
+                rad_angle = math.radians(-self.angle)
+                new_x = center_x + (x - center_x) * math.cos(rad_angle) - (y - center_y) * math.sin(rad_angle)
+                new_y = center_y + (x - center_x) * math.sin(rad_angle) + (y - center_y) * math.cos(rad_angle)
+                new_path.append((new_x, new_y))
+            transformed_paths.append(new_path)
+            
+        return transformed_paths
